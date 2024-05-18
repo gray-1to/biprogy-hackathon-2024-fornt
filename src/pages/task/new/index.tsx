@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { toast } from 'react-toastify';
+import React, { useState } from 'react';
+import FlashMessage from '@/hock/FlashMessage';
 
 type TodoCreateParams = {
   worker: string;
@@ -9,6 +10,10 @@ type TodoCreateParams = {
 };
 
 const TodoNewPage = () => {
+  const [flashMessage, setFlashMessage] = useState<{
+    message: string;
+    type: 'success' | 'error';
+  } | null>(null);
   const {
     register,
     handleSubmit,
@@ -21,8 +26,8 @@ const TodoNewPage = () => {
         method: 'POST',
         body: JSON.stringify(data),
         headers: {
-          'Content-Type': 'application/json'
-        }
+          'Content-Type': 'application/json',
+        },
       });
 
       if (!response.ok) {
@@ -32,10 +37,10 @@ const TodoNewPage = () => {
       const result = await response.json();
       console.log(result);
 
-      toast.success('編集内容の保存に成功しました');
+      setFlashMessage({ message: '編集内容の保存に成功しました', type: 'success' });
     } catch (error) {
-      toast.error('保存中にエラーが発生しました');
       console.error('Error:', error);
+      setFlashMessage({ message: '保存中にエラーが発生しました', type: 'error' });
     }
   };
 
@@ -44,6 +49,14 @@ const TodoNewPage = () => {
       <Head>
         <title>TODO作成ページ</title>
       </Head>
+
+      {flashMessage && (
+        <FlashMessage
+          message={flashMessage.message}
+          type={flashMessage.type}
+          onClose={() => setFlashMessage(null)}
+        />
+      )}
       <div className="min-h-screen flex items-center justify-center bg-gray-100">
         <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
           <h2 className="text-2xl font-bold mb-6 text-center">TODO作成ページ</h2>
