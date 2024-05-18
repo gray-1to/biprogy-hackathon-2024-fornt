@@ -22,7 +22,8 @@ const TodoNewPage = () => {
 
   const onSubmit: SubmitHandler<TodoCreateParams> = async (data) => {
     try {
-      const response = await fetch('http://localhost:3001/todo/post', {
+      console.log(JSON.stringify(data))
+      const response = await fetch('http://127.0.0.1:3001/todo/post', {
         method: 'POST',
         body: JSON.stringify(data),
         headers: {
