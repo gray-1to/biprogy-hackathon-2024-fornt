@@ -8,22 +8,25 @@ type TodoCreateParams = {
 };
 
 const TodoNewPage = () => {
-  const { register, handleSubmit } = useForm<TodoCreateParams>();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<TodoCreateParams>();
 
   const onSubmit: SubmitHandler<TodoCreateParams> = (data) => {
     console.log(data);
-    fetch('http://localhost:3001//todo/post', {
+    // 例：API経由でデータを送信する
+    fetch('http://localhost:3001/todo/post', {
       method: 'POST',
       body: JSON.stringify(data),
       headers: {
-        'Content-Type': 'application/json',
-      },
+        'Content-Type': 'application/json'
+      }
     })
-      .then((response) => response.json())
-      .then((data) => console.log(data))
-      .catch((error) => console.error('Error:', error));
-
-    console.log('OK');
+    .then(response => response.json())
+    .then(data => console.log(data))
+    .catch(error => console.error('Error:', error));
   };
 
   return (
@@ -31,29 +34,60 @@ const TodoNewPage = () => {
       <Head>
         <title>TODO作成ページ</title>
       </Head>
-      <div>
-        <h2>TODO作成ページ</h2>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div>
-            <label htmlFor="content" className="font-semibold text-base mb-2">
-              担当者
-            </label>
-            <input id="worker" {...register('worker')} className="border" />
-          </div>
-          <div>
-            <label htmlFor="content" className="font-semibold text-base mb-2">
-              やること
-            </label>
-            <textarea id="task" {...register('task')} className="border" />
-          </div>
-          <div>
-            <label htmlFor="content" className="font-semibold text-base mb-2">
-              所要時間
-            </label>
-            <input id="time" {...register('time')} className="border" />
-          </div>
-          <button type="submit">Submit</button>
-        </form>
+      <div className="min-h-screen flex items-center justify-center bg-gray-100">
+        <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+          <h2 className="text-2xl font-bold mb-6 text-center">TODO作成ページ</h2>
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            <div>
+              <label htmlFor="worker" className="block font-semibold text-base mb-2">
+                担当者
+              </label>
+              <input
+                id="worker"
+                {...register('worker', {
+                  required: '入力してください',
+                })}
+                className="border border-gray-300 rounded w-full py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              {errors.worker && (
+                <span className="text-red-500 text-sm">{errors.worker.message}</span>
+              )}
+            </div>
+            <div>
+              <label htmlFor="task" className="block font-semibold text-base mb-2">
+                やること
+              </label>
+              <textarea
+                id="task"
+                {...register('task', {
+                  required: '入力してください',
+                })}
+                className="border border-gray-300 rounded w-full py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              {errors.task && <span className="text-red-500 text-sm">{errors.task.message}</span>}
+            </div>
+            <div>
+              <label htmlFor="time" className="block font-semibold text-base mb-2">
+                所要時間
+              </label>
+              <input
+                id="time"
+                type="number"
+                {...register('time', {
+                  required: '入力してください',
+                })}
+                className="border border-gray-300 rounded w-full py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              {errors.time && <span className="text-red-500 text-sm">{errors.time.message}</span>}
+            </div>
+            <button
+              type="submit"
+              className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+            >
+              送信
+            </button>
+          </form>
+        </div>
       </div>
     </>
   );
