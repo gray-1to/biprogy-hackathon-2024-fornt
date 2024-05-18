@@ -34,7 +34,7 @@ const TodoNewPage = () => {
       toast.success('タスクを作成しました');
     } catch (error) {
       console.error('Error:', error);
-      toast.success('エラーが発生しました');
+      toast.error('エラーが発生しました');
     }
   };
 

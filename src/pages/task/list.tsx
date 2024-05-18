@@ -3,34 +3,69 @@ import Link from 'next/link';
 import { toast } from 'react-toastify';
 import { Task } from '../api/todo/list';
 
-// export const getServerSideProps = (async () => {
 export const getStaticProps = async () => {
   // TODO: set backend url
-  const API_URL = 'http://localhost:3000/api/todo/list';
-  //   const API_URL = 'http://127.0.0.1:3001/todo/get';
+  //   const API_URL = 'http://localhost:3000/api/todo/list';
+  const API_URL = 'http://127.0.0.1:3001/todo/get';
   const res = await fetch(API_URL);
   const repo = await res.json();
 
-  return { props: { repo } };
+  return { props: { repo: repo.records || repo } };
 };
 
 type HomeProps = {
-  repo: Task[] | any;
+  repo: Task[];
 };
 
 export default function Home({ repo }: HomeProps) {
-  const started = true;
   const isMine = true;
 
-  const handleFinish = () => {
-    toast.success('お疲れ様でした');
+  const handleFinish = async (id: number) => {
+    try {
+      // TODO: confirm endpoint & method
+      const response = await fetch('http://127.0.0.1:3001/todo/put/finish', {
+        method: 'PUT',
+        body: JSON.stringify({ id: id }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      toast.success('お疲れ様でした');
+    } catch (error) {
+      console.error('Error:', error);
+      toast.error('エラーが発生しました');
+    }
   };
 
-  const handleStart = () => {
-    toast.success('タスクが開始されました');
+  const handleStart = async (id: number) => {
+    try {
+      // TODO: confirm endpoint & method
+      const response = await fetch('http://127.0.0.1:3001/todo/put/start', {
+        method: 'PUT',
+        body: JSON.stringify({ id: id }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      toast.success('タスクが開始されました');
+    } catch (error) {
+      console.error('Error:', error);
+      toast.error('エラーが発生しました');
+    }
   };
 
   const handleFeedback = () => {
+    // TODO: confirm endpoint & method
     // toast.success("フィードバックを送りました");
   };
 
@@ -72,8 +107,8 @@ export default function Home({ repo }: HomeProps) {
               <tbody className="bg-white divide-y divide-gray-200">
                 {Array.isArray(repo) &&
                   repo.map((task: Task, index: number) => {
-                    // {repo.records.map((task: Task) => {
                     const metter = task.trouble_level.value * 4;
+                    const started = metter !== 0;
                     const progressBarColor =
                       task.trouble_level.value > 5 ? 'bg-red-500' : 'bg-blue-500';
 
@@ -99,14 +134,14 @@ export default function Home({ repo }: HomeProps) {
                             (started ? (
                               <button
                                 className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded"
-                                onClick={() => handleFinish()}
+                                onClick={() => handleFinish(task.$id.value)}
                               >
                                 終了
                               </button>
                             ) : (
                               <button
                                 className="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded"
-                                onClick={() => handleStart()}
+                                onClick={() => handleStart(task.$id.value)}
                               >
                                 開始
                               </button>
