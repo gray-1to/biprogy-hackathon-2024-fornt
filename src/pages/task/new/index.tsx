@@ -1,5 +1,6 @@
 import Head from 'next/head';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
 
 type TodoCreateParams = {
   worker: string;
@@ -14,19 +15,28 @@ const TodoNewPage = () => {
     formState: { errors },
   } = useForm<TodoCreateParams>();
 
-  const onSubmit: SubmitHandler<TodoCreateParams> = (data) => {
-    console.log(data);
-    // 例：API経由でデータを送信する
-    fetch('http://localhost:3001/todo/post', {
-      method: 'POST',
-      body: JSON.stringify(data),
-      headers: {
-        'Content-Type': 'application/json'
+  const onSubmit: SubmitHandler<TodoCreateParams> = async (data) => {
+    try {
+      const response = await fetch('http://localhost:3001/todo/post', {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
-    })
-    .then(response => response.json())
-    .then(data => console.log(data))
-    .catch(error => console.error('Error:', error));
+
+      const result = await response.json();
+      console.log(result);
+
+      toast.success('編集内容の保存に成功しました');
+    } catch (error) {
+      toast.error('保存中にエラーが発生しました');
+      console.error('Error:', error);
+    }
   };
 
   return (
