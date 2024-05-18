@@ -1,9 +1,6 @@
 import type { InferGetServerSidePropsType, GetServerSideProps } from 'next'
 
-// export const getServerSideProps = (async () => {
-export const getStaticProps = (async () => {
-    // TODO: set backend url
-    // const API_URL = 'http://localhost:3000/api/todo/list'
+export const getServerSideProps = (async () => {
     const API_URL = 'http://127.0.0.1:3001/todo/get'
     const res = await fetch(API_URL)
     const repo = await res.json()

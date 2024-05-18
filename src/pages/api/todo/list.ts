@@ -1,12 +1,14 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
 type Data = {
-  name: string;
+  'worker': string,
+  'task': string,
+  'time': number
 };
 
 export default function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Data>,
+  res: NextApiResponse<Array<Data>>,
 ) {
   res.status(200).json(
     [{'worker': 'Bill',
@@ -15,8 +17,4 @@ export default function handler(
     {'worker': 'Bob',
     'task': 'make presentation',
     'time': 60},]);
-// res.status(200).json(
-//     {'worker': 'Bill',
-//     'task': 'create demo',
-//     'time': 40});
 }
