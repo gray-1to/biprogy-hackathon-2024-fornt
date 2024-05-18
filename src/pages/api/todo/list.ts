@@ -1,6 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 export type Task = {
+  $id: {
+    value: number;
+  };
   worker: {
     value: string;
   };
@@ -16,8 +19,12 @@ export type Task = {
 };
 
 export default function handler(req: NextApiRequest, res: NextApiResponse<Task[]>) {
+  // NOTE: trouble_level 0 は見開始
   res.status(200).json([
     {
+      $id: {
+        value: 1,
+      },
       worker: {
         value: 'Bill',
       },
@@ -32,6 +39,9 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<Task[]
       }
     },
     {
+      $id: {
+        value: 2,
+      },
       worker: {
         value: 'Bob',
       },
