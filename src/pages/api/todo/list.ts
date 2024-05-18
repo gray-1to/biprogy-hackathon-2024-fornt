@@ -10,6 +10,9 @@ export type Task = {
   time: {
     value: number;
   };
+  trouble_level: {
+    value: number;
+  };
 };
 
 export default function handler(req: NextApiRequest, res: NextApiResponse<Task[]>) {
@@ -24,6 +27,9 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<Task[]
       time: {
         value: 40,
       },
+      trouble_level: {
+        value: 3,
+      }
     },
     {
       worker: {
@@ -35,6 +41,9 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<Task[]
       time: {
         value: 60,
       },
+      trouble_level: {
+        value: 6,
+      }
     },
   ]);
 }
