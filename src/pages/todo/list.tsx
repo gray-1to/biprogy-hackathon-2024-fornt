@@ -1,11 +1,13 @@
 import type { InferGetServerSidePropsType, GetServerSideProps } from 'next'
 
-export const getStaticProps = (async () => {
-    // Fetch data from external API
-    const res = await fetch('http://localhost:3000/api/todo/list')
+export const getServerSideProps = (async () => {
+    // TODO: set backend url
+    const API_URL = 'http://localhost:3000/api/todo/list'
+    // const API_URL = 'http://localhost:3001/'
+    const res = await fetch(API_URL)
     const repo = await res.json()
     console.log(repo)
-    // Pass data to the page via props
+    
     return { props: { repo } }
   })
 
