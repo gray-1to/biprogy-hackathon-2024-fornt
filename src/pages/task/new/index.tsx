@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import React, { useState } from 'react';
-import FlashMessage from '@/hock/FlashMessage';
+import FlashMessage, { FlashMessageProps } from '@/hock/FlashMessage';
 
 type TodoCreateParams = {
   worker: string;
@@ -10,10 +10,7 @@ type TodoCreateParams = {
 };
 
 const TodoNewPage = () => {
-  const [flashMessage, setFlashMessage] = useState<{
-    message: string;
-    type: 'success' | 'error';
-  } | null>(null);
+  const [flashMessage, setFlashMessage] = useState<FlashMessageProps | null>(null);
   const {
     register,
     handleSubmit,
@@ -22,7 +19,6 @@ const TodoNewPage = () => {
 
   const onSubmit: SubmitHandler<TodoCreateParams> = async (data) => {
     try {
-      console.log(JSON.stringify(data))
       const response = await fetch('http://127.0.0.1:3001/todo/post', {
         method: 'POST',
         body: JSON.stringify(data),
@@ -36,12 +32,19 @@ const TodoNewPage = () => {
       }
 
       const result = await response.json();
-      console.log(result);
 
-      setFlashMessage({ message: '編集内容の保存に成功しました', type: 'success' });
+      setFlashMessage({
+        message: '編集内容の保存に成功しました',
+        type: 'success',
+        onClose: () => setFlashMessage(null),
+      });
     } catch (error) {
       console.error('Error:', error);
-      setFlashMessage({ message: '保存中にエラーが発生しました', type: 'error' });
+      setFlashMessage({
+        message: '保存中にエラーが発生しました',
+        type: 'error',
+        onClose: () => setFlashMessage(null),
+      });
     }
   };
 

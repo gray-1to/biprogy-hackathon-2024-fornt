@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-interface FlashMessageProps {
+export type FlashMessageProps = {
   message: string;
   type: 'success' | 'error';
   onClose: () => void;

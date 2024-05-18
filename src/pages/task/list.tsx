@@ -18,6 +18,8 @@ type HomeProps = {
 };
 
 export default function Home({ repo }: HomeProps) {
+  const [flashMessage, setFlashMessage] = useState<FlashMessageProps | null>(null);
+
   return (
     <table>
       <thead>
