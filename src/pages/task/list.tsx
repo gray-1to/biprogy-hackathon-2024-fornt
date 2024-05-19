@@ -124,7 +124,7 @@ export default function Home({ task_list }: HomeProps) {
                         <td className="py-4 px-6 border-b border-gray-200 text-center">
                           {task.time}
                           <div className="m-auto w-40 bg-gray-200 mt-2">
-                            <div className="hidden w-4 w-8 w-12 w-16 w-20 w-24 w-28 w-32 w-36 w-40">
+                            <div className="hidden w-0 w-4 w-8 w-12 w-16 w-20 w-24 w-28 w-32 w-36 w-40">
                               hidden
                             </div>
                             <div className={` h-2 ${progressBarColor} w-${metter}`}></div>
