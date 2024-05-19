@@ -24,10 +24,8 @@ export default function Home({ task_list }: HomeProps) {
 
   const handleStart = async (id: number) => {
     try {
-      // TODO: confirm endpoint & method
-      const response = await fetch(API_BASE_URL + '/todo/put/start', {
+      const response = await fetch(API_BASE_URL + `/todo/put/start?id=${id}`, {
         method: 'PUT',
-        body: JSON.stringify({ id: id }),
         headers: {
           'Content-Type': 'application/json',
         },
@@ -47,9 +45,9 @@ export default function Home({ task_list }: HomeProps) {
   const handleFinish = async (id: number) => {
     try {
       // TODO: confirm endpoint & method
-      const response = await fetch(API_BASE_URL + '/todo/put/finish', {
-        method: 'PUT',
-        body: JSON.stringify({ id: id }),
+      const response = await fetch(API_BASE_URL + `/todo/put/end?id=${id}`, {
+        method: 'DELETE',
+        // body: JSON.stringify({ id: id }),
         headers: {
           'Content-Type': 'application/json',
         },
