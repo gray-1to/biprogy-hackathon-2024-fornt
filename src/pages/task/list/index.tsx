@@ -12,7 +12,7 @@ export const getServerSideProps = async () => {
   const res = await fetch(API_URL);
   const taskList = await res.json();
 
-  return { props: { taskList: taskList } };
+  return { props: { taskList: taskList || [] } };
 };
 
 type HomeProps = {
@@ -95,6 +95,12 @@ export default function Home({ taskList: taskListProp }: HomeProps) {
               className="inline-block bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
             >
               新規作成
+            </Link>
+            <Link
+              href="/notification"
+              className="inline-block bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+            >
+              通知LINE bot
             </Link>
           </div>
           <div className="overflow-x-auto">

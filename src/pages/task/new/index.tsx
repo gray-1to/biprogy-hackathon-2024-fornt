@@ -2,6 +2,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
+import { useState } from 'react';
 import Footer from '../../../components/footer';
 import Header from '../../../components/header';
 
@@ -19,6 +20,8 @@ const TodoNewPage = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<TodoCreateParams>();
+  const [taskInput, setTaskInput] = useState("")
+  const [timeInput, setTimeInput] = useState(15)
 
   const onSubmit: SubmitHandler<TodoCreateParams> = async (data) => {
     try {
@@ -36,6 +39,8 @@ const TodoNewPage = () => {
       }
 
       const result = await response.json();
+      setTaskInput("");
+      setTimeInput(15);
       toast.success('タスクを作成しました');
     } catch (error) {
       console.error('Error:', error);
@@ -80,6 +85,8 @@ const TodoNewPage = () => {
                   required: '入力してください',
                 })}
                 className="border border-gray-300 rounded w-full py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                value={taskInput}
+                onChange={(e) => setTaskInput(e.target.value)}
               />
               {errors.task && <span className="text-red-500 text-sm">{errors.task.message}</span>}
             </div>
@@ -95,6 +102,8 @@ const TodoNewPage = () => {
                   required: '入力してください',
                 })}
                 className="border border-gray-300 rounded w-full py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                value={timeInput}
+                onChange={(e) => setTimeInput(e.target.value)}
               />
               {errors.time && <span className="text-red-500 text-sm">{errors.time.message}</span>}
             </div>
