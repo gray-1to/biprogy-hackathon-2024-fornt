@@ -3,27 +3,29 @@ import Link from 'next/link';
 import { toast } from 'react-toastify';
 import { Task } from '../api/todo/list';
 
+const API_BASE_URL = 'http://127.0.0.1:3001';
+
 export const getStaticProps = async () => {
   // TODO: set backend url
-  //   const API_URL = 'http://localhost:3000/api/todo/list';
-  const API_URL = 'http://127.0.0.1:3001/todo/get';
+  // const API_URL = 'http://localhost:3000/api/todo/list';
+  const API_URL = API_BASE_URL + '/todo/get';
   const res = await fetch(API_URL);
-  const repo = await res.json();
+  const task_list = await res.json();
 
-  return { props: { repo: repo.records || repo } };
+  return { props: { task_list: task_list } };
 };
 
 type HomeProps = {
-  repo: Task[];
+  task_list: Task[];
 };
 
-export default function Home({ repo }: HomeProps) {
+export default function Home({ task_list }: HomeProps) {
   const isMine = true;
 
   const handleFinish = async (id: number) => {
     try {
       // TODO: confirm endpoint & method
-      const response = await fetch('http://127.0.0.1:3001/todo/put/finish', {
+      const response = await fetch(API_BASE_URL + '/todo/put/finish', {
         method: 'PUT',
         body: JSON.stringify({ id: id }),
         headers: {
@@ -45,7 +47,7 @@ export default function Home({ repo }: HomeProps) {
   const handleStart = async (id: number) => {
     try {
       // TODO: confirm endpoint & method
-      const response = await fetch('http://127.0.0.1:3001/todo/put/start', {
+      const response = await fetch(API_BASE_URL + '/todo/put/start', {
         method: 'PUT',
         body: JSON.stringify({ id: id }),
         headers: {
@@ -105,23 +107,22 @@ export default function Home({ repo }: HomeProps) {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {Array.isArray(repo) &&
-                  repo.map((task: Task, index: number) => {
-                    const metter = task.trouble_level.value * 4;
+                {Array.isArray(task_list) &&
+                  task_list.map((task: Task, index: number) => {
+                    const metter = task.trouble_level * 4;
                     const started = metter !== 0;
-                    const progressBarColor =
-                      task.trouble_level.value > 5 ? 'bg-red-500' : 'bg-blue-500';
+                    const progressBarColor = task.trouble_level > 5 ? 'bg-red-500' : 'bg-blue-500';
 
                     return (
                       <tr key={index} className="hover:bg-gray-50">
                         <td className="py-4 px-6 border-b border-gray-200 text-center">
-                          {task.worker.value}
+                          {task.worker}
                         </td>
                         <td className="py-4 px-6 border-b border-gray-200 text-center">
-                          {task.task.value}
+                          {task.task}
                         </td>
                         <td className="py-4 px-6 border-b border-gray-200 text-center">
-                          {task.time.value}
+                          {task.time}
                           <div className="m-auto w-40 bg-gray-200 mt-2">
                             <div className="hidden w-4 w-8 w-12 w-16 w-20 w-24 w-28 w-32 w-36 w-40">
                               hidden
@@ -134,14 +135,14 @@ export default function Home({ repo }: HomeProps) {
                             (started ? (
                               <button
                                 className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded"
-                                onClick={() => handleFinish(task.$id.value)}
+                                onClick={() => handleFinish(task.$id)}
                               >
                                 終了
                               </button>
                             ) : (
                               <button
                                 className="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded"
-                                onClick={() => handleStart(task.$id.value)}
+                                onClick={() => handleStart(task.$id)}
                               >
                                 開始
                               </button>
