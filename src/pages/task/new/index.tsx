@@ -2,6 +2,8 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
+import Footer from '../../../components/footer';
+import Header from '../../../components/header';
 
 const API_BASE_URL = 'http://127.0.0.1:3001';
 
@@ -43,12 +45,14 @@ const TodoNewPage = () => {
   return (
     <>
       <Head>
-        <title>TODO作成ページ</title>
+        <title>タスク作成ページ</title>
       </Head>
 
-      <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <Header />
+      
+      <div className="pt-16 min-h-[calc(100vh-8rem)] flex items-center justify-center bg-gray-100">
         <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
-          <h2 className="text-2xl font-bold mb-6 text-center">TODO作成ページ</h2>
+          <h2 className="text-2xl font-bold mb-6 text-center">タスク作成ページ</h2>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div>
               <label htmlFor="worker" className="block font-semibold text-base mb-2">
@@ -80,11 +84,12 @@ const TodoNewPage = () => {
             </div>
             <div>
               <label htmlFor="time" className="block font-semibold text-base mb-2">
-                所要時間
+                所要時間(min)
               </label>
               <input
                 id="time"
                 type="number"
+                min={0}
                 {...register('time', {
                   required: '入力してください',
                 })}
@@ -107,6 +112,8 @@ const TodoNewPage = () => {
           </form>
         </div>
       </div>
+
+      <Footer />
     </>
   );
 };
