@@ -1,26 +1,37 @@
 import { Task } from '@/pages/api/todo/list';
 import Head from 'next/head';
 import Link from 'next/link';
+import { useState } from 'react';
 import { toast } from 'react-toastify';
 
 const API_BASE_URL = 'http://localhost:3001';
 
 export const getServerSideProps = async () => {
-  // TODO: set backend url
   // const API_URL = 'http://localhost:3000/api/todo/list';
   const API_URL = API_BASE_URL + '/todo/get';
   const res = await fetch(API_URL);
-  const task_list = await res.json();
+  const taskList = await res.json();
 
-  return { props: { task_list: task_list } };
+  return { props: { taskList: taskList } };
 };
 
 type HomeProps = {
-  task_list: Task[];
+  taskList: Task[];
 };
 
-export default function Home({ task_list }: HomeProps) {
+export default function Home({ taskList: taskListProp }: HomeProps) {
+  const [taskList, setTaskList] = useState<Task[]>(taskListProp);
   const isMine = true;
+
+  const updateTask = (id: number) => {
+    setTaskList((prevTaskList) =>
+      prevTaskList.map((task) => (task.id === id ? { ...task, trouble_level: 1 } : task))
+    );
+  };
+
+  const deleteTask = (id: number) => {
+    setTaskList((prevTaskList) => prevTaskList.filter((task) => task.id !== id));
+  };
 
   const handleStart = async (id: number) => {
     try {
@@ -35,6 +46,7 @@ export default function Home({ task_list }: HomeProps) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
+      updateTask(id);
       toast.success('タスクが開始されました');
     } catch (error) {
       console.error('Error:', error);
@@ -44,10 +56,8 @@ export default function Home({ task_list }: HomeProps) {
 
   const handleFinish = async (id: number) => {
     try {
-      // TODO: confirm endpoint & method
       const response = await fetch(API_BASE_URL + `/todo/put/end?id=${id}`, {
         method: 'DELETE',
-        // body: JSON.stringify({ id: id }),
         headers: {
           'Content-Type': 'application/json',
         },
@@ -57,6 +67,7 @@ export default function Home({ task_list }: HomeProps) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
+      deleteTask(id);
       toast.success('お疲れ様でした');
     } catch (error) {
       console.error('Error:', error);
@@ -105,8 +116,8 @@ export default function Home({ task_list }: HomeProps) {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {Array.isArray(task_list) &&
-                  task_list.map((task: Task, index: number) => {
+                {Array.isArray(taskList) &&
+                  taskList.map((task: Task, index: number) => {
                     const metter = task.trouble_level * 4;
                     const started = metter !== 0;
                     const progressBarColor = task.trouble_level > 5 ? 'bg-red-500' : 'bg-blue-500';
@@ -131,12 +142,20 @@ export default function Home({ task_list }: HomeProps) {
                         <td className="py-4 px-6 border-b border-gray-200 flex justify-center">
                           {isMine &&
                             (started ? (
-                              <button
-                                className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded"
-                                onClick={() => handleFinish(task.id)}
-                              >
-                                終了
-                              </button>
+                              <>
+                                <button
+                                  className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded mx-1"
+                                  onClick={() => handleFinish(task.id)}
+                                >
+                                  終了
+                                </button>
+                                <Link
+                                  href={'/qa_archive/new'}
+                                  className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded  mx-1"
+                                >
+                                  フィードバック
+                                </Link>
+                              </>
                             ) : (
                               <button
                                 className="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded"
@@ -145,15 +164,6 @@ export default function Home({ task_list }: HomeProps) {
                                 開始
                               </button>
                             ))}
-
-                          {!isMine && (
-                            <button
-                              className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded"
-                              onClick={() => handleFeedback()}
-                            >
-                              フィードバック
-                            </button>
-                          )}
                         </td>
                       </tr>
                     );
