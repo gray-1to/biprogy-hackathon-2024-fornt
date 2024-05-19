@@ -3,9 +3,9 @@ import Link from 'next/link';
 import { toast } from 'react-toastify';
 import { Task } from '../api/todo/list';
 
-const API_BASE_URL = 'http://127.0.0.1:3001';
+const API_BASE_URL = 'http://localhost:3001';
 
-export const getStaticProps = async () => {
+export const getServerSideProps = async () => {
   // TODO: set backend url
   // const API_URL = 'http://localhost:3000/api/todo/list';
   const API_URL = API_BASE_URL + '/todo/get';
@@ -21,28 +21,6 @@ type HomeProps = {
 
 export default function Home({ task_list }: HomeProps) {
   const isMine = true;
-
-  const handleFinish = async (id: number) => {
-    try {
-      // TODO: confirm endpoint & method
-      const response = await fetch(API_BASE_URL + '/todo/put/finish', {
-        method: 'PUT',
-        body: JSON.stringify({ id: id }),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      toast.success('お疲れ様でした');
-    } catch (error) {
-      console.error('Error:', error);
-      toast.error('エラーが発生しました');
-    }
-  };
 
   const handleStart = async (id: number) => {
     try {
@@ -60,6 +38,28 @@ export default function Home({ task_list }: HomeProps) {
       }
 
       toast.success('タスクが開始されました');
+    } catch (error) {
+      console.error('Error:', error);
+      toast.error('エラーが発生しました');
+    }
+  };
+
+  const handleFinish = async (id: number) => {
+    try {
+      // TODO: confirm endpoint & method
+      const response = await fetch(API_BASE_URL + '/todo/put/finish', {
+        method: 'PUT',
+        body: JSON.stringify({ id: id }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      toast.success('お疲れ様でした');
     } catch (error) {
       console.error('Error:', error);
       toast.error('エラーが発生しました');
@@ -135,14 +135,14 @@ export default function Home({ task_list }: HomeProps) {
                             (started ? (
                               <button
                                 className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded"
-                                onClick={() => handleFinish(task.$id)}
+                                onClick={() => handleFinish(task.id)}
                               >
                                 終了
                               </button>
                             ) : (
                               <button
                                 className="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded"
-                                onClick={() => handleStart(task.$id)}
+                                onClick={() => handleStart(task.id)}
                               >
                                 開始
                               </button>
