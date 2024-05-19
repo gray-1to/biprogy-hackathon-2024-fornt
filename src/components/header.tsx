@@ -11,8 +11,8 @@ const Header = () => {
           <Link href="/task/list" className="ml-4 hover:underline">
             タスク一覧
           </Link>
-          <Link href="/task/new" className="ml-4 hover:underline">
-            タスク作成
+          <Link href="/qa_archive/list" className="ml-4 hover:underline">
+            QA一覧
           </Link>
         </nav>
       </div>
