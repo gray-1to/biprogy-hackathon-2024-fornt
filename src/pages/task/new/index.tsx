@@ -20,9 +20,10 @@ const TodoNewPage = () => {
 
   const onSubmit: SubmitHandler<TodoCreateParams> = async (data) => {
     try {
+      const send_data = { ...data, startTime: '-1' };
       const response = await fetch(API_BASE_URL + '/todo/post', {
         method: 'POST',
-        body: JSON.stringify(data),
+        body: JSON.stringify(send_data),
         headers: {
           'Content-Type': 'application/json',
         },
