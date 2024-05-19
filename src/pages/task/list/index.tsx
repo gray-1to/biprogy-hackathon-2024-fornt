@@ -1,12 +1,11 @@
+import { Task } from '@/pages/api/todo/list';
 import Head from 'next/head';
 import Link from 'next/link';
 import { toast } from 'react-toastify';
-import { Task } from '../api/todo/list';
 
 const API_BASE_URL = 'http://localhost:3001';
 
 export const getServerSideProps = async () => {
-  // TODO: set backend url
   // const API_URL = 'http://localhost:3000/api/todo/list';
   const API_URL = API_BASE_URL + '/todo/get';
   const res = await fetch(API_URL);
