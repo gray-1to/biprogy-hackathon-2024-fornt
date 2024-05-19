@@ -14,14 +14,14 @@ Up
 docker compose up
 ```
 
-localhost:3000を開く
+Open localhost:3000 in your browser.
 
-### コンテナに入る
+### Operations Inside the Container
+Accessing the Container
 ```bash
 docker compose run app sh
 ```
 
-#### コンテナ内操作
 Lint
 ```bash
 npm run lint
