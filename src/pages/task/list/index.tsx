@@ -12,7 +12,7 @@ export const getServerSideProps = async () => {
   const res = await fetch(API_URL);
   const taskList = await res.json();
 
-  return { props: { taskList: taskList } };
+  return { props: { taskList: taskList || [] } };
 };
 
 type HomeProps = {

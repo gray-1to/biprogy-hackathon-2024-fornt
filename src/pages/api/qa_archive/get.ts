@@ -1,27 +1,37 @@
-import type { NextApiRequest, NextApiResponse } from "next";
+import type { NextApiRequest, NextApiResponse } from 'next';
 
-type Data = {
-  questionier: {value: string},
-  answerer: {value: string},
-  question: {value: string},
-  evaluation: {value: number}
+export type QAArchive = {
+  questioner: { value: string };
+  respondent: { value: string };
+  question: { value: string };
+  answer: { value: string };
+  comment: { value: string };
+  evaluation: { value: number };
 };
 
 type Records = {
-  records: Array<Data>
-}
+  records: Array<QAArchive>;
+};
 
-export default function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<Records>,
-) {
+export default function handler(req: NextApiRequest, res: NextApiResponse<Records>) {
   res.status(200).json({
-    "records":[{'questionier': {'value': 'Alice'},
-                'answerer': {'value': 'Bob'},
-                'question': {'value': 'how to build demo'},
-                'evaluation': {'value': 4}},
-                {'questionier': {'value': 'Danny'},
-                'answerer': {'value': 'Ema'},
-                'question': {'value': 'how to refactor'},
-                'evaluation': {'value': 2}},]});
+    records: [
+      {
+        questioner: { value: 'Alice' },
+        respondent: { value: 'Alice' },
+        question: { value: '質問1' },
+        answer: { value: 'Bob' },
+        comment: { value: 'how to build demo' },
+        evaluation: { value: 4 },
+      },
+      {
+        questioner: { value: 'Danny' },
+        respondent: { value: 'Alice' },
+        question: { value: '質問２' },
+        answer: { value: 'Ema' },
+        comment: { value: 'how to refactor' },
+        evaluation: { value: 2 },
+      },
+    ],
+  });
 }
