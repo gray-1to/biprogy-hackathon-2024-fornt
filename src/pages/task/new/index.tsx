@@ -3,6 +3,8 @@ import Link from 'next/link';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
+const API_BASE_URL = 'http://127.0.0.1:3001';
+
 type TodoCreateParams = {
   worker: string;
   task: string;
@@ -18,7 +20,7 @@ const TodoNewPage = () => {
 
   const onSubmit: SubmitHandler<TodoCreateParams> = async (data) => {
     try {
-      const response = await fetch('http://127.0.0.1:3001/todo/post', {
+      const response = await fetch(API_BASE_URL + '/todo/post', {
         method: 'POST',
         body: JSON.stringify(data),
         headers: {
