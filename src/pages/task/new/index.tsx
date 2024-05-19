@@ -1,7 +1,9 @@
 import Head from 'next/head';
+import Link from 'next/link';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import React, { useState } from 'react';
-import FlashMessage from '@/hock/FlashMessage';
+import { toast } from 'react-toastify';
+
+const API_BASE_URL = 'http://127.0.0.1:3001';
 
 type TodoCreateParams = {
   worker: string;
@@ -10,10 +12,6 @@ type TodoCreateParams = {
 };
 
 const TodoNewPage = () => {
-  const [flashMessage, setFlashMessage] = useState<{
-    message: string;
-    type: 'success' | 'error';
-  } | null>(null);
   const {
     register,
     handleSubmit,
@@ -22,8 +20,7 @@ const TodoNewPage = () => {
 
   const onSubmit: SubmitHandler<TodoCreateParams> = async (data) => {
     try {
-      console.log(JSON.stringify(data))
-      const response = await fetch('http://127.0.0.1:3001/todo/post', {
+      const response = await fetch(API_BASE_URL + '/todo/post', {
         method: 'POST',
         body: JSON.stringify(data),
         headers: {
@@ -36,12 +33,10 @@ const TodoNewPage = () => {
       }
 
       const result = await response.json();
-      console.log(result);
-
-      setFlashMessage({ message: '編集内容の保存に成功しました', type: 'success' });
+      toast.success('タスクを作成しました');
     } catch (error) {
       console.error('Error:', error);
-      setFlashMessage({ message: '保存中にエラーが発生しました', type: 'error' });
+      toast.error('エラーが発生しました');
     }
   };
 
@@ -51,13 +46,6 @@ const TodoNewPage = () => {
         <title>TODO作成ページ</title>
       </Head>
 
-      {flashMessage && (
-        <FlashMessage
-          message={flashMessage.message}
-          type={flashMessage.type}
-          onClose={() => setFlashMessage(null)}
-        />
-      )}
       <div className="min-h-screen flex items-center justify-center bg-gray-100">
         <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
           <h2 className="text-2xl font-bold mb-6 text-center">TODO作成ページ</h2>
@@ -106,10 +94,16 @@ const TodoNewPage = () => {
             </div>
             <button
               type="submit"
-              className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+              className="block w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 mb-4"
             >
               送信
             </button>
+            <Link
+              href="/task/list"
+              className="block w-full bg-white text-blue-500 border border-blue-500 py-2 px-4 rounded hover:bg-blue-500 hover:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 text-center"
+            >
+              タスク一覧へ
+            </Link>
           </form>
         </div>
       </div>

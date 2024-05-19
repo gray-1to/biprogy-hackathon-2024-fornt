@@ -1,20 +1,29 @@
-import type { NextApiRequest, NextApiResponse } from "next";
+import type { NextApiRequest, NextApiResponse } from 'next';
 
-type Data = {
-  'worker': string,
-  'task': string,
-  'time': number
+export type Task = {
+  $id: number;
+  worker: string;
+  task: string;
+  time: number;
+  trouble_level: number;
 };
 
-export default function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<Array<Data>>,
-) {
-  res.status(200).json(
-    [{'worker': 'Bill',
-    'task': 'create demo',
-    'time': 40},
-    {'worker': 'Bob',
-    'task': 'make presentation',
-    'time': 60},]);
+export default function handler(req: NextApiRequest, res: NextApiResponse<Task[]>) {
+  // NOTE: trouble_level 0 は見開始
+  res.status(200).json([
+    {
+      $id: 1,
+      worker: 'Bill',
+      task: 'create demo',
+      time: 40,
+      trouble_level: 3,
+    },
+    {
+      $id: 2,
+      worker: 'Bob',
+      task: 'make presentation',
+      time: 60,
+      trouble_level: 6,
+    },
+  ]);
 }
