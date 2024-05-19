@@ -27,5 +27,12 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<Task[]
       time: 60,
       trouble_level: 6,
     },
+    {
+      id: 3,
+      worker: 'Bob2',
+      task: 'make presentation',
+      time: 60,
+      trouble_level: 0,
+    },
   ]);
 }
