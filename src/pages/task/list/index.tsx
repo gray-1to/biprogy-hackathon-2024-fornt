@@ -1,26 +1,29 @@
 import { Task } from '@/pages/api/todo/list';
 import Head from 'next/head';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
+import Footer from '../../../components/footer';
+import Header from '../../../components/header';
 
 const API_BASE_URL = 'http://localhost:3001';
 
-export const getServerSideProps = async () => {
-  // const API_URL = 'http://localhost:3000/api/todo/list';
-  const API_URL = API_BASE_URL + '/todo/get';
-  const res = await fetch(API_URL);
-  const taskList = await res.json();
+// export const getServerSideProps = async () => {
+//   // const API_URL = 'http://localhost:3000/api/todo/list';
+//   const API_URL = API_BASE_URL + '/todo/get';
+//   const res = await fetch(API_URL);
+//   const taskList = await res.json();
 
-  return { props: { taskList: taskList || [] } };
-};
+//   return { props: { taskList: taskList || [] } };
+// };
 
 type HomeProps = {
   taskList: Task[];
 };
 
-export default function Home({ taskList: taskListProp }: HomeProps) {
-  const [taskList, setTaskList] = useState<Task[]>(taskListProp);
+// export default function Home({ taskList: taskListProp }: HomeProps) {
+export default function Home() {
+  const [taskList, setTaskList] = useState<Task[]>([]);
   const isMine = true;
 
   const updateTask = (id: number) => {
@@ -54,6 +57,13 @@ export default function Home({ taskList: taskListProp }: HomeProps) {
     }
   };
 
+  useEffect(() => {
+    const API_URL = API_BASE_URL + '/todo/get';
+    fetch(API_URL)
+      .then((res) => res.json())
+      .then((data)=> setTaskList(data));
+  }, [])
+
   const handleFinish = async (id: number) => {
     try {
       const response = await fetch(API_BASE_URL + `/todo/put/end?id=${id}`, {
@@ -86,9 +96,11 @@ export default function Home({ taskList: taskListProp }: HomeProps) {
         <title>TODO一覧ページ</title>
       </Head>
 
+      <Header />
+
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="py-12">
-          <h1 className="text-3xl font-bold text-center mb-8">TODO一覧ページ</h1>
+          <h1 className="text-3xl font-bold text-center mb-8">タスク一覧ページ</h1>
           <div className="flex justify-end mb-4">
             <Link
               href="/task/new"
@@ -179,6 +191,8 @@ export default function Home({ taskList: taskListProp }: HomeProps) {
           </div>
         </div>
       </div>
+
+      <Footer />
     </>
   );
 }

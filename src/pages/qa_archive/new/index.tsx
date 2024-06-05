@@ -2,6 +2,8 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
+import Footer from '../../../components/footer';
+import Header from '../../../components/header';
 
 const API_BASE_URL = 'http://127.0.0.1:3001';
 
@@ -50,6 +52,7 @@ const onSubmit: SubmitHandler<QAArchiveCreateParams> = async (data) => {
         <title>QAアーカイブ作成ページ</title>
       </Head>
 
+      <Header />
       <div className="min-h-screen flex items-center justify-center bg-gray-100">
         <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
           <h2 className="text-2xl font-bold mb-6 text-center">QAアーカイブ作成ページ</h2>
@@ -152,6 +155,7 @@ const onSubmit: SubmitHandler<QAArchiveCreateParams> = async (data) => {
           </form>
         </div>
       </div>
+      <Footer />
     </>
   );
 };

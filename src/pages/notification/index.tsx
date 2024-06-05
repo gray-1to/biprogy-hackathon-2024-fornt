@@ -1,6 +1,8 @@
 import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
+import Footer from '../../components/footer';
+import Header from '../../components/header';
 
 // TODO: 通知botページのリンクを作成する
 
@@ -10,6 +12,7 @@ export default function Notification(){
             <Head>
                 <title>通知LINE botページ</title>
             </Head>
+            <Header />
             <div className="min-h-screen flex items-center justify-center bg-gray-100">
                 <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
                     <h1 className="text-3xl font-bold text-center mb-8">LINE通知bot</h1>
@@ -27,6 +30,7 @@ export default function Notification(){
                     </Link>
                 </div>
             </div>
+            <Footer />
         </>
         
     )

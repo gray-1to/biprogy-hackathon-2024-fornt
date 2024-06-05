@@ -1,6 +1,8 @@
 import { QAArchive } from '@/pages/api/qa_archive/get';
 import Head from 'next/head';
 import Link from 'next/link';
+import Footer from '../../../components/footer';
+import Header from '../../../components/header';
 
 const API_BASE_URL = 'http://localhost:3001';
 
@@ -24,6 +26,7 @@ export default function QAArchiveList({ qAArchiveList }: QAArchiveListProps) {
         <title>QAアーカイブ一覧ページ</title>
       </Head>
 
+      <Header />
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="py-12">
           <h1 className="text-3xl font-bold text-center mb-8">QAアーカイブ一覧ページ</h1>
@@ -95,6 +98,7 @@ export default function QAArchiveList({ qAArchiveList }: QAArchiveListProps) {
           </div>
         </div>
       </div>
+      <Footer />
     </>
   );
 }
